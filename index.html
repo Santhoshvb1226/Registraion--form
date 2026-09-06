@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            width: 350px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .error {
+            color: red;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: green;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+
+        #success {
+            color: green;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Registration Form</h2>
+
+        <form id="registrationForm">
+
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter your name">
+            <div id="nameError" class="error"></div>
+
+            <label for="email">Email</label>
+            <input type="text" id="email" placeholder="Enter your email">
+            <div id="emailError" class="error"></div>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter password">
+            <div id="passwordError" class="error"></div>
+
+            <button type="submit" id="submitBtn" disabled>
+                Register
+            </button>
+
+            <div id="success"></div>
+
+        </form>
+    </div>
+
+
+    <script>
+
+        // Get form elements
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+
+        const nameError = document.getElementById("nameError");
+        const emailError = document.getElementById("emailError");
+        const passwordError = document.getElementById("passwordError");
+
+        const submitBtn = document.getElementById("submitBtn");
+        const form = document.getElementById("registrationForm");
+
+
+        // Validate Name
+        function validateName() {
+
+            if (nameInput.value.trim() === "") {
+                nameError.textContent = "Name is required";
+                return false;
+            }
+
+            nameError.textContent = "";
+            return true;
+        }
+
+
+        // Validate Email
+        function validateEmail() {
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (emailInput.value.trim() === "") {
+                emailError.textContent = "Email is required";
+                return false;
+            }
+
+            if (!emailPattern.test(emailInput.value)) {
+                emailError.textContent = "Enter a valid email address";
+                return false;
+            }
+
+            emailError.textContent = "";
+            return true;
+        }
+
+
+        // Validate Password
+        function validatePassword() {
+
+            if (passwordInput.value.length < 6) {
+                passwordError.textContent =
+                    "Password must be at least 6 characters";
+                return false;
+            }
+
+            passwordError.textContent = "";
+            return true;
+        }
+
+
+        // Check all fields
+        function checkForm() {
+
+            const nameValid = validateName();
+            const emailValid = validateEmail();
+            const passwordValid = validatePassword();
+
+            // Enable button only when everything is valid
+            submitBtn.disabled = !(nameValid && emailValid && passwordValid);
+        }
+
+
+        // Real-time validation
+        nameInput.addEventListener("input", checkForm);
+        emailInput.addEventListener("input", checkForm);
+        passwordInput.addEventListener("input", checkForm);
+
+
+        // Form submission
+        form.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            checkForm();
+
+            if (!submitBtn.disabled) {
+                document.getElementById("success").textContent =
+                    "Registration successful!";
+
+                form.reset();
+
+                submitBtn.disabled = true;
+            }
+        });
+
+    </script>
+
+</body>
+</html>
